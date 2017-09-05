@@ -1,7 +1,4 @@
-var MistHelper = require('mist-device').MistHelper;
-var MistIoSwitch = require('./src/application.js').MistIoSwitch;
-var model = require('./src/model.json');
+var Switch = require('./src/switch.js').Switch;
 
-var mistIoSwitch = new MistIoSwitch();
+var mistIoSwitch = new Switch();
 
-var app = new MistHelper(model, mistIoSwitch);
