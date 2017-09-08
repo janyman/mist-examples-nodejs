@@ -1,23 +1,24 @@
 {
-    "device": "switch",
-    "model": {
-        "mist": {
-            "name": "IO Switch",
-            "type": "meta",
-            "tag": "mist-ui-package",
-            "value": "https://mist.controlthings.fi/mist-io-switch-0.0.2.tgz"
-        },
-        "version": {
-            "type": "meta",
-            "tag": "version",
-            "value": "0.0.1"
-        },
-        "state": {
-            "label": "Switch",
-            "type": "bool",
-            "data": true,
-            "write": true
+    "mist": {
+        "type": "string",
+        "#": {
+            "name": {
+                "label": "Name",
+                "type": "string",
+                "read": true
+            }
         }
+    },
+    "version": {
+        "type": "meta",
+        "tag": "version",
+        "value": "0.0.1"
+    },
+    "state": {
+        "label": "Switch",
+        "type": "bool",
+        "data": true,
+        "write": true
     }
 }
 

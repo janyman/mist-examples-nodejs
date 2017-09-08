@@ -8,6 +8,8 @@ function Switch(id) {
         
     node.create(model);
     
+    node.update('mist.name', 'Switch');
+    
     node.invoke('config', function(args, cb) {
         cb({ cool: ['a', 7, true], echo: args });
     });
