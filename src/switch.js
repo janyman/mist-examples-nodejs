@@ -3,12 +3,16 @@ var MistNode = require('mist-api').MistNode;
 var model = require('./model.json');
 var util = require("util");
 
+var name = process.env.NAME || 'Switch';
+
+if (!process.env.NAME) { console.log('Use: NAME="Switch Label" to run several instances.'); }
+
 function Switch(id) {
-    var node = new MistNode({ name: 'Switch' }); // , coreIp: '127.0.0.1', corePort: 9094
+    var node = new MistNode({ name: name }); // , coreIp: '127.0.0.1', corePort: 9094
         
     node.create(model);
     
-    node.update('mist.name', 'Switch');
+    node.update('mist.name', name);
     
     node.invoke('config', function(args, cb) {
         cb({ cool: ['a', 7, true], echo: args });
