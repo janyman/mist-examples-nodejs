@@ -14,11 +14,29 @@
         "tag": "version",
         "value": "0.0.1"
     },
-    "state": {
-        "label": "Switch",
-        "type": "bool",
-        "data": true,
-        "write": true
+    "geo": {
+        "type": "invoke",
+        "invoke": true
+    },
+    "spotCount": {
+        "label": "Amount of parking spots",
+        "type": "int",
+        "read": true
+    },
+    "spotFree": {
+        "label": "Amount of free parking spots",
+        "type": "int",
+        "read": true
+    },
+    "getParkingSpot": {
+        "label": "Find free parking spot",
+        "type": "invoke",
+        "invoke": true
+    },
+    "cancelParkingSpot": {
+        "label": "Cancel parking spot",
+        "type": "invoke",
+        "invoke": true
     }
 }
 
