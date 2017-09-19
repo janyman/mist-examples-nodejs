@@ -1,0 +1,32 @@
+{
+    "@context": "http://schema.mobivoc.org/",
+    "@type": "ParkingFacility",
+    "@id": 84,
+    "totalCapacity": {
+        "@type": "totalCapacity",
+        "value": "mistSource/capacity"
+    },
+    "supportVehicleType": {
+        "@type": "vehicleType",
+        "value": "mistSource/vehicle"
+    },
+    "placeName": {
+        "@type": "placeName",
+        "value": "mistSource/name"
+    },
+    "isOwnedBy": {
+        "@type": "isOwnedBy",
+        "value": "mistSource/owner"
+    },
+    "isLocated": {
+        "@type": "ParkingFacilityLocation",
+        "@context": "http://schema.org",
+        "@type": "Place",
+        "geo": { 
+            "@type": "GeoCoordinates",
+            "latitude": "mistSource/coordinates.lat",
+            "longitude": "mistSource/coordinates.lon"
+        }
+    }
+}
+        

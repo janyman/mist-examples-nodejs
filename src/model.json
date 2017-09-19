@@ -6,6 +6,29 @@
                 "label": "Name",
                 "type": "string",
                 "read": true
+            },
+            "ui": {
+                "type": "string",
+                "#": {
+                    "url": {
+                        "label": "Url",
+                        "type": "string",
+                        "read": true
+                    }        
+                }
+            }
+        }
+    },
+    "directory": {
+        "type": "invoke",
+        "invoke": true  
+    },
+    "context": {
+        "type": "string",
+        "#": {
+            "parking": {
+                "type": "string",
+                "read": true   
             }
         }
     },
@@ -13,12 +36,52 @@
         "type": "meta",
         "tag": "version",
         "value": "0.0.1"
+    },  
+    "capacity": {
+        "label": "Available parking spots",
+        "type": "int",
+        "read": true,
+        "write": true
     },
-    "state": {
-        "label": "Switch",
+    "owner": {
+        "label": "Owner",
+        "type": "string",
+        "read": true
+    },
+    "geo": {
+        "label": "Location",
+        "type": "invoke",
+        "invoke": true
+    },
+    "vehicle": {
+        "label": "Supported vehicles",
+        "type": "invoke",
+        "invoke": true
+    },
+    "tree": {
+        "label": "Tree",
+        "type": "string",
+        "#": {
+            "button1": {
+                "label": "ButtonOne",
+                "type": "bool",
+                "data": true,
+                "write": true
+            },
+            "button2": {
+                "label": "ButtonTwo",
+                "type": "bool",
+                "data": true,
+                "write": true
+            }
+        }
+    },
+    "getParkingSpot": {
+        "label": "parking spot",
         "type": "bool",
         "data": true,
         "write": true
-    }
+    }   
+    
 }
 
