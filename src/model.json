@@ -16,6 +16,19 @@
                         "read": true
                     }        
                 }
+            },
+             "product": {
+                "type": "string",
+                "#": {
+                    "description": {
+                        "type": "string",
+                        "read": true 
+                    },
+                    "imageUrl": {
+                        "type": "string",
+                        "read": true 
+                    }
+                }
             }
         }
     },
@@ -37,12 +50,6 @@
         "tag": "version",
         "value": "0.0.1"
     },  
-    "capacity": {
-        "label": "Available parking spots",
-        "type": "int",
-        "read": true,
-        "write": true
-    },
     "owner": {
         "label": "Owner",
         "type": "string",
@@ -58,30 +65,26 @@
         "type": "invoke",
         "invoke": true
     },
-    "tree": {
-        "label": "Tree",
-        "type": "string",
-        "#": {
-            "button1": {
-                "label": "ButtonOne",
-                "type": "bool",
-                "data": true,
-                "write": true
-            },
-            "button2": {
-                "label": "ButtonTwo",
-                "type": "bool",
-                "data": true,
-                "write": true
-            }
-        }
+    "spotCount": {
+        "label": "Amount of parking spots",
+        "type": "int",
+        "read": true,
+        "write": true
+    },
+    "spotFree": {
+        "label": "Amount of free parking spots",
+        "type": "int",
+        "read": true
     },
     "getParkingSpot": {
-        "label": "parking spot",
-        "type": "bool",
-        "data": true,
-        "write": true
-    }   
-    
+        "label": "Find free parking spot",
+        "type": "invoke",
+        "invoke": true
+    },
+    "cancelParkingSpot": {
+        "label": "Cancel parking spot",
+        "type": "invoke",
+        "invoke": true
+    }
 }
 

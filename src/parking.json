@@ -4,7 +4,7 @@
     "@id": 84,
     "totalCapacity": {
         "@type": "totalCapacity",
-        "value": "mistSource/capacity"
+        "value": "mistSource/parkingCount"
     },
     "supportVehicleType": {
         "@type": "vehicleType",

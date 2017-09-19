@@ -4,29 +4,48 @@ var model = require('./model.json');
 var parking = require('./parking.json');
 var util = require("util");
 
+var name = process.env.NAME || 'Controlthings parking';
+var lon = parseFloat(process.env.LON) || 25.6809455;
+var lat = parseFloat(process.env.LAT) || 60.404048;
+
+if (!process.env.NAME) {
+    console.log('Use: NAME="Switch Label" to run several instances.');
+}
+
+var parkingSpots = [];
+var parkingCount = 10;
+var parkingId = 1;
+var owner = "Controlthings";
+var vehicle = ["Car"];
+var coordinates = {lon: lon, lat: lat};
+
+var imageUrl =  'https://mist.controlthings.fi/parking.bmp';
+var description = "";
+
 function Switch(id) {
-    var node = new MistNode({name: 'Switch'}); // , coreIp: '127.0.0.1', corePort: 9094
+
+    var url = 'http://mist.cto.fi/mist-parking-ui-0.0.2.tgz'
+
+
+
+    var node = new MistNode({name: name}); // , coreIp: '127.0.0.1', corePort: 9094
 
     node.create(model);
 
-    var name = 'Controlthings parking'
-    var url = 'http://mist.cto.fi/mist-parking-ui-0.0.2.tgz'
-
     node.update('mist.name', name);
     node.update('mist.ui.url', url);
-
-    var capacity = 10;
-    var owner = "CT"
-
-    node.update("capacity", capacity);
     node.update("owner", owner);
 
-    var vehicle = ["Car"];
-    var coordinates = {lon: 25.6809455, lat: 60.404048};
+    node.update('spotCount', parkingCount);
+    node.update('spotFree', parkingCount - parkingSpots.length);
+
+  node.update('mist.product.imageUrl', imageUrl);
+    node.update('mist.product.description', description);
 
     node.invoke('vehicle', function (args, cb) {
         cb(vehicle);
     });
+
     node.invoke('geo', function (args, cb) {
         cb(coordinates);
     });
@@ -51,21 +70,45 @@ function Switch(id) {
         }
     });
 
-    node.invoke('config', function (args, cb) {
-        cb({cool: ['a', 7, true], echo: args});
+    node.invoke('geo', function (args, cb) {
+        cb({lon: coordinates.lon, lat: coordinates.lat});
+    });
+
+    node.invoke('getParkingSpot', function (args, cb) {
+
+        if (parkingCount <= parkingSpots.length) {
+            // parking is full
+            return cb({err: "We're full", code: 1});
+        }
+
+        var reservation = {id: 'p-' + (parkingId++)};
+        parkingSpots.push(reservation);
+        node.update('spotFree', parkingCount - parkingSpots.length);
+        cb(reservation);
+    });
+
+    node.invoke('cancelParkingSpot', function (args, cb) {
+        var reservationId = args[0];
+        for (var i in parkingSpots) {
+            if (parkingSpots[i].id === reservationId) {
+                parkingSpots.splice(i, 1);
+                node.update('spotFree', parkingCount - parkingSpots.length);
+                return cb(true);
+            }
+        }
+        cb({err: 'Parking not found', code: 2});
     });
 
     node.write(function (epid, data) {
         console.log('Node write:', epid, data);
-        if (epid === 'state') {
-            node.update(epid, !!data);
+        if (epid === "spotCount") {
+            parkingCount = data;
+            node.update(epid, parkingCount);
         }
-        if (epid === "capacity") {
-            capacity = data;
-            node.update(epid, capacity);
-        }
+
     });
 }
+
 
 util.inherits(Switch, EventEmitter);
 
