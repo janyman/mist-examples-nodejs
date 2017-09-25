@@ -23,13 +23,20 @@ var imageUrl =  'https://mist.controlthings.fi/parking.bmp';
 var description = "";
 
 function Switch(id) {
-
     var url = 'http://mist.cto.fi/mist-parking-ui-0.0.2.tgz'
 
-
-
-    var node = new MistNode({name: name}); // , coreIp: '127.0.0.1', corePort: 9094
-
+    var self = this;
+    var node = new MistNode({ name: name }); // , coreIp: '127.0.0.1', corePort: 9094
+    
+    this.chargeEnabled = false;
+    this.chargeTime = 10;
+    
+    setInterval(function() {
+        if (self.chargeTime <= 0 || !self.chargeEnabled) { return; }
+        node.update('chargeTime', --self.chargeTime);
+        if(self.chargeTime === 0) { node.update('chargeEnabled', false); }
+    }, 1000);
+        
     node.create(model);
 
     node.update('mist.name', name);
@@ -104,8 +111,20 @@ function Switch(id) {
         if (epid === "spotCount") {
             parkingCount = data;
             node.update(epid, parkingCount);
+            return;
         }
 
+        node.update(epid, data);
+        
+        if (epid === 'chargeEnabled') {
+            
+            self.chargeEnabled = !!data;
+
+            if (!!data) {
+                self.chargeTime = 10;
+                node.update('chargeTime', self.chargeTime);
+            }
+        }
     });
 }
 
