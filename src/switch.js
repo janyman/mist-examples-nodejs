@@ -39,18 +39,18 @@ function Switch(id) {
     node.update('spotCount', parkingCount);
     node.update('spotFree', parkingCount - parkingSpots.length);
 
-  node.update('mist.product.imageUrl', imageUrl);
+    node.update('mist.product.imageUrl', imageUrl);
     node.update('mist.product.description', description);
 
-    node.invoke('vehicle', function (args, cb) {
+    node.invoke('vehicle', function (args, peer, cb) {
         cb(vehicle);
     });
 
-    node.invoke('geo', function (args, cb) {
+    node.invoke('geo', function (args, peer, cb) {
         cb(coordinates);
     });
 
-    node.invoke("directory", function (args, cb) {
+    node.invoke("directory", function (args, peer, cb) {
         if (args === "parking") {
             console.log(parking);
             var obj = JSON.parse(JSON.stringify(parking), function (key, value) {
@@ -70,11 +70,11 @@ function Switch(id) {
         }
     });
 
-    node.invoke('geo', function (args, cb) {
+    node.invoke('geo', function (args, peer, cb) {
         cb({lon: coordinates.lon, lat: coordinates.lat});
     });
 
-    node.invoke('getParkingSpot', function (args, cb) {
+    node.invoke('getParkingSpot', function (args, peer, cb) {
 
         if (parkingCount <= parkingSpots.length) {
             // parking is full
@@ -87,7 +87,7 @@ function Switch(id) {
         cb(reservation);
     });
 
-    node.invoke('cancelParkingSpot', function (args, cb) {
+    node.invoke('cancelParkingSpot', function (args, peer, cb) {
         var reservationId = args[0];
         for (var i in parkingSpots) {
             if (parkingSpots[i].id === reservationId) {
@@ -99,13 +99,9 @@ function Switch(id) {
         cb({err: 'Parking not found', code: 2});
     });
 
-    node.write(function (epid, data) {
-        console.log('Node write:', epid, data);
-        if (epid === "spotCount") {
-            parkingCount = data;
-            node.update(epid, parkingCount);
-        }
-
+    node.write('spotCount', function (value, peer, cb) {
+        parkingCount = value;
+        node.update('spotCount', parkingCount);
     });
 }
 
