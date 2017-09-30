@@ -65,6 +65,17 @@
         "type": "invoke",
         "invoke": true
     },
+    "chargeEnabled": {
+        "label": "Enable charging",
+        "type": "bool",
+        "read": true,
+        "write": true
+    },
+    "chargeTime": {
+        "label": "Charging time remaining",
+        "type": "int",
+        "read": true
+    },
     "spotCount": {
         "label": "Amount of parking spots",
         "type": "int",
