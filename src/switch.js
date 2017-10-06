@@ -15,7 +15,7 @@ if (!process.env.NAME) {
 var parkingSpots = [];
 var parkingCount = 10;
 var parkingId = 1;
-var owner = "Controlthings";
+var owner = "ControlThings";
 var vehicle = ["Car"];
 var coordinates = {lon: lon, lat: lat};
 
@@ -33,21 +33,30 @@ function Switch(id) {
     
     setInterval(function() {
         if (self.chargeTime <= 0 || !self.chargeEnabled) { return; }
-        node.update('chargeTime', --self.chargeTime);
-        if(self.chargeTime === 0) { node.update('chargeEnabled', false); }
+        
+        self.chargeTime--;
+        node.changed('chargeTime');
+        
+        if(self.chargeTime === 0) {
+            self.chargeEnabled = false;
+            node.changed('chargeEnabled'); 
+        }
     }, 1000);
         
     node.create(model);
 
-    node.update('mist.name', name);
-    node.update('mist.ui.url', url);
-    node.update("owner", owner);
+    node.read('chargeEnabled', function(args, peer, cb) { cb(self.chargeEnabled); });
+    node.read('chargeTime', function(args, peer, cb) { cb(self.chargeTime); });
 
-    node.update('spotCount', parkingCount);
-    node.update('spotFree', parkingCount - parkingSpots.length);
+    node.read('mist.name', function(args, peer, cb) { cb(name); });
+    node.read('mist.ui.url', function(args, peer, cb) { cb(url); });
+    node.read('owner', function(args, peer, cb) { cb(owner); });
 
-    node.update('mist.product.imageUrl', imageUrl);
-    node.update('mist.product.description', description);
+    node.read('spotCount', function(args, peer, cb) { cb(parkingCount); });
+    node.read('spotFree', function(args, peer, cb) { cb(parkingCount - parkingSpots.length); });
+
+    node.read('mist.product.imageUrl', function(args, peer, cb) { cb(imageUrl); });
+    node.read('mist.product.description', function(args, peer, cb) { cb(description); });
 
     node.invoke('vehicle', function (args, peer, cb) {
         cb(vehicle);
@@ -90,7 +99,7 @@ function Switch(id) {
 
         var reservation = {id: 'p-' + (parkingId++)};
         parkingSpots.push(reservation);
-        node.update('spotFree', parkingCount - parkingSpots.length);
+        node.changed('spotFree');
         cb(reservation);
     });
 
@@ -99,7 +108,7 @@ function Switch(id) {
         for (var i in parkingSpots) {
             if (parkingSpots[i].id === reservationId) {
                 parkingSpots.splice(i, 1);
-                node.update('spotFree', parkingCount - parkingSpots.length);
+                node.changed('spotFree');
                 return cb(true);
             }
         }
@@ -108,17 +117,18 @@ function Switch(id) {
 
     node.write('spotCount', function (value, peer, cb) {
         parkingCount = value;
-        node.update('spotCount', parkingCount);
+        node.changed('spotCount');
+        node.changed('spotFree');
     });
 
     node.write('chargeEnabled', function (value, peer, cb) {
         self.chargeEnabled = !!value;
         
-        node.update('chargeEnabled', self.chargeEnabled);
+        node.changed('chargeEnabled');
 
         if (!!value) {
             self.chargeTime = 10;
-            node.update('chargeTime', self.chargeTime);
+            node.changed('chargeTime');
         }
     });
 }
