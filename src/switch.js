@@ -45,18 +45,18 @@ function Switch(id) {
         
     node.create(model);
 
-    node.read('chargeEnabled', function(args, peer, cb) { cb(self.chargeEnabled); });
-    node.read('chargeTime', function(args, peer, cb) { cb(self.chargeTime); });
+    node.read('chargeEnabled', function(args, peer, cb) { cb(null, self.chargeEnabled); });
+    node.read('chargeTime', function(args, peer, cb) { cb(null, self.chargeTime); });
 
-    node.read('mist.name', function(args, peer, cb) { cb(name); });
-    node.read('mist.ui.url', function(args, peer, cb) { cb(url); });
-    node.read('owner', function(args, peer, cb) { cb(owner); });
+    node.read('mist.name', function(args, peer, cb) { cb(null, name); });
+    node.read('mist.ui.url', function(args, peer, cb) { cb(null, url); });
+    node.read('owner', function(args, peer, cb) { cb(null, owner); });
 
-    node.read('spotCount', function(args, peer, cb) { cb(parkingCount); });
-    node.read('spotFree', function(args, peer, cb) { cb(parkingCount - parkingSpots.length); });
+    node.read('spotCount', function(args, peer, cb) { cb(null, parkingCount); });
+    node.read('spotFree', function(args, peer, cb) { cb(null, parkingCount - parkingSpots.length); });
 
-    node.read('mist.product.imageUrl', function(args, peer, cb) { cb(imageUrl); });
-    node.read('mist.product.description', function(args, peer, cb) { cb(description); });
+    node.read('mist.product.imageUrl', function(args, peer, cb) { cb(null, imageUrl); });
+    node.read('mist.product.description', function(args, peer, cb) { cb(null, description); });
 
     node.invoke('vehicle', function (args, peer, cb) {
         cb(vehicle);
@@ -79,15 +79,15 @@ function Switch(id) {
                 }
             });
             console.log("obj", obj);
-            cb(obj);
+            cb(null, obj);
         } else {
             var context = model.context["#"];
-            cb(Object.keys(context));
+            cb(null, Object.keys(context));
         }
     });
 
     node.invoke('geo', function (args, peer, cb) {
-        cb({lon: coordinates.lon, lat: coordinates.lat});
+        cb(null, {lon: coordinates.lon, lat: coordinates.lat});
     });
 
     node.invoke('getParkingSpot', function (args, peer, cb) {
@@ -100,7 +100,7 @@ function Switch(id) {
         var reservation = {id: 'p-' + (parkingId++)};
         parkingSpots.push(reservation);
         node.changed('spotFree');
-        cb(reservation);
+        cb(null, reservation);
     });
 
     node.invoke('cancelParkingSpot', function (args, peer, cb) {
@@ -119,6 +119,7 @@ function Switch(id) {
         parkingCount = value;
         node.changed('spotCount');
         node.changed('spotFree');
+        cb();
     });
 
     node.write('chargeEnabled', function (value, peer, cb) {
