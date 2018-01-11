@@ -10,9 +10,9 @@ if (!process.env.NAME) { console.log('Use: NAME="Switch Label" to run several in
 function Switch(id) {
     var node = new MistNode({ name: name }); // , coreIp: '127.0.0.1', corePort: 9094
         
-    node.endpointAdd('mist', { type: 'string' });
-    node.endpointAdd('mist.name', { type: 'string', read: function(args, peer, cb) { cb(null, name); } });
-    node.endpointAdd('state', { 
+    node.addEndpoint('mist', { type: 'string' });
+    node.addEndpoint('mist.name', { type: 'string', read: function(args, peer, cb) { cb(null, name); } });
+    node.addEndpoint('state', { 
         type: 'bool',
         read: function(args, peer, cb) { cb(null, state); },
         write: function(value, peer, cb) {
@@ -22,7 +22,7 @@ function Switch(id) {
             node.changed('state');
         }
     });
-    node.endpointAdd('config', { type: 'invoke', invoke: function(args, peer, cb) { cb(null, { cool: ['a', 7, true], echo: args }); } });
+    node.addEndpoint('config', { type: 'invoke', invoke: function(args, peer, cb) { cb(null, { cool: ['a', 7, true], echo: args }); } });
 }
 
 util.inherits(Switch, EventEmitter);
