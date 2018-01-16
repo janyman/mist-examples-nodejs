@@ -1,18 +1,14 @@
 {
-  "name": "mist-io-switch",
+  "name": "mist-examples",
   "version": "0.0.1",
   "author": "Jesper Lökfors <jesper.lokfors@controlthings.fi>",
-  "description": "",
-  "main": "src/aplication.js",
+  "description": "ControlThings Mist exmaple code for node.js",
+  "license": "Apache-2.0",
   "dependencies": {
-    "debug": "2.1.3",
-    "mist-api": "0.0.18"
+    "mist-api": "0.4.0-beta"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://wish.cto.fi:/git/mist-node/io-switch#master"
-  },
-  "scripts": {
-    "test": "istanbul cover --hook-run-in-context _mocha -- -R spec"
+    "url": "https://github.com/akaustel/mist-examples-nodejs.git"
   }
 }

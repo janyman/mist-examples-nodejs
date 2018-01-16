@@ -4,7 +4,7 @@ var name = process.env.NAME || 'Switch';
 
 if (!process.env.NAME) { console.log('Use: NAME="Switch Label" to run several instances.'); }
 
-function Switch(id) {
+function Switch() {
     var relay = false;
     
     var node = new MistNode({ name: name }); // , coreIp: '127.0.0.1', corePort: 9094
