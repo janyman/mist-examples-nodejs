@@ -1,15 +1,14 @@
 var EventEmitter = require('events').EventEmitter;
 var MistNode = require('mist-api').MistNode;
 var model = require('./model.json');
-var parking = require('./parking.json');
 var util = require("util");
 
-var name = process.env.NAME || 'Controlthings parking';
+var name = process.env.NAME || 'ControlThings parking';
 var lon = parseFloat(process.env.LON) || 25.6809455;
 var lat = parseFloat(process.env.LAT) || 60.404048;
 
 if (!process.env.NAME) {
-    console.log('Use: NAME="Switch Label" to run several instances.');
+    console.log('Use: NAME="MY Parking Ltd. 2" to run several instances.');
 }
 
 var parkingSpots = [];
@@ -22,7 +21,7 @@ var coordinates = {lon: lon, lat: lat};
 var imageUrl =  'https://mist.controlthings.fi/parking.bmp';
 var description = "";
 
-function Switch(id) {
+function Parking(id) {
     var url = 'http://mist.cto.fi/mist-parking-ui-0.0.2.tgz'
 
     var self = this;
@@ -59,31 +58,48 @@ function Switch(id) {
     node.read('mist.product.description', function(args, peer, cb) { cb(null, description); });
 
     node.invoke('vehicle', function (args, peer, cb) {
-        cb(vehicle);
+        cb(null, vehicle);
     });
 
     node.invoke('geo', function (args, peer, cb) {
-        cb(coordinates);
+        cb(null, coordinates);
     });
 
     node.invoke("directory", function (args, peer, cb) {
-        if (args === "parking") {
-            console.log(parking);
-            var obj = JSON.parse(JSON.stringify(parking), function (key, value) {
-                if (typeof value === "string" && value.indexOf('mistSource/') !== -1) {
-                    console.log(value.split('mistSource/')[1]);
-                    console.log(eval(value.split('mistSource/')[1]));
-                    return(eval(value.split('mistSource/')[1]));
-                } else {
-                    return value;
+
+        var schema = {
+            "@context": "http://schema.mobivoc.org/",
+            "@type": "ParkingFacility",
+            "@id": 84,
+            totalCapacity: {
+                "@type": "totalCapacity",
+                value: parkingCount
+            },
+            supportVehicleType: {
+                "@type": "vehicleType",
+                value: vehicle
+            },
+            placeName: {
+                "@type": "placeName",
+                value: name
+            },
+            isOwnedBy: {
+                "@type": "isOwnedBy",
+                value: owner
+            },
+            isLocated: {
+                "@type": "ParkingFacilityLocation",
+                "@context": "http://schema.org",
+                //"@type": "Place",
+                geo: { 
+                    "@type": "GeoCoordinates",
+                    latitude: coordinates.lat,
+                    longitude: coordinates.lon
                 }
-            });
-            console.log("obj", obj);
-            cb(null, obj);
-        } else {
-            var context = model.context["#"];
-            cb(null, Object.keys(context));
-        }
+            }
+        };
+
+        cb(null, schema);
     });
 
     node.invoke('geo', function (args, peer, cb) {
@@ -109,10 +125,10 @@ function Switch(id) {
             if (parkingSpots[i].id === reservationId) {
                 parkingSpots.splice(i, 1);
                 node.changed('spotFree');
-                return cb(true);
+                return cb(null, true);
             }
         }
-        cb({err: 'Parking not found', code: 2});
+        cb(null, {err: 'Parking not found', code: 2});
     });
 
     node.write('spotCount', function (value, peer, cb) {
@@ -131,12 +147,13 @@ function Switch(id) {
             self.chargeTime = 10;
             node.changed('chargeTime');
         }
+        cb();
     });
 }
 
 
-util.inherits(Switch, EventEmitter);
+util.inherits(Parking, EventEmitter);
 
 module.exports = {
-    Switch: Switch
+    Parking: Parking
 };

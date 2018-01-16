@@ -1,4 +1,4 @@
-var Switch = require('./src/switch.js').Switch;
+var Parking = require('./src/parking.js').Parking;
 
-var mistIoSwitch = new Switch();
+var parking = new Parking();
 
