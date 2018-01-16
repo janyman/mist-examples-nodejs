@@ -3,7 +3,7 @@ var MistNode = require('mist-api').MistNode;
 var model = require('./model.json');
 var util = require("util");
 
-var name = process.env.NAME || 'ControlThings parking';
+var name = process.env.NAME || 'Parking';
 var lon = parseFloat(process.env.LON) || 25.6809455;
 var lat = parseFloat(process.env.LAT) || 60.404048;
 
