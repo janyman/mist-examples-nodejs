@@ -2,14 +2,18 @@
 
 ## Prerequisites
 
-You will need to be an appropriate wish-core (the peer-to-peer identity based communication layer), form https://mist.controlthings.fi/dist.
+If you are running on Linux x64 everything should work out of the box according to the instructions below. For OSX see section OSX workaround. Windows is not supported yet.
+
+Download and install node.js v6.x: https://nodejs.org/dist/latest-v6.x/. You may use Node Version Manager `nvm` (https://github.com/creationix/nvm).
+
+You will need to have an appropriate wish-core (the peer-to-peer identity based communication layer mist is based on). Binaries are available from https://mist.controlthings.fi/dist.
 
 Download and run a wish-core:
 
 ```sh
 wget http://mist.controlthings.fi/dist/wish-core-v0.8.0-beta-2-x64-linux
 chmod u+x wish-core-v0.8.0-beta-2-x64-linux
-wish-core-v0.8.0-beta-2-x64-linux
+./wish-core-v0.8.0-beta-2-x64-linux
 ```
 
 Install command line tools for Mist and Wish:
@@ -26,9 +30,7 @@ wish-cli
 identity.create('Demo Identity')
 ```
 
-If you are running on Linux x64/ia32 everything should work out of the box. For OSX see section OSX workaround. Windows is not supported yet.
-
-In the examples root directory run 
+In the examples root directory run:
 
 ```sh
 npm install
@@ -46,7 +48,7 @@ node switch/run.js
 
 ### Parking
 
-A simple parking service. 
+A parking service. 
 
 ```sh
 node parking/run.js
@@ -88,8 +90,14 @@ brew install gcc48 --enable-cxx
 
 Now you should have everything you need.
 
-
 ### OSX High Sierra
 
+No simple workaround is available at this point. MistApi-x64-darwin depends on:
 
+```sh
+/usr/local/opt/gcc@4.8/lib/gcc/4.8/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.19.0)
+/usr/local/lib/gcc/4.8/libgcc_s.1.dylib (compatibility version 1.0.0, current version 1.0.0)
+```
+
+These can be manually placed in the file system, but `brew install gcc48` is broken on High Sierra for some reason.
 
