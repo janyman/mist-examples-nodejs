@@ -72,9 +72,17 @@ mist.control.write(peers[x], 'relay', true)
 
 ## OSX workaround
 
-There is currently a problem with running on OSX, but it can be worked around.
+There is currently a problem with running on OSX, but it can be worked around as follows.
 
-### OSX older than High Sierra (i.e. Sierra and older, <= 10.12):
+### Install dependencies
+
+Run this one-liner in the terminal, or download it to see what it does.
+
+```bash
+curl -s https://mist.controlthings.fi/dist/osx-gcc48-runtime.sh | sudo /bin/bash -s
+```
+
+### OSX older than High Sierra may use `brew` (i.e. Sierra and older, versions <= 10.12):
 
 Install `brew`:
 
@@ -89,15 +97,4 @@ brew install gcc48 --enable-cxx
 ```
 
 Now you should have everything you need.
-
-### OSX High Sierra
-
-No simple workaround is available at this point. MistApi-x64-darwin depends on:
-
-```sh
-/usr/local/opt/gcc@4.8/lib/gcc/4.8/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.19.0)
-/usr/local/lib/gcc/4.8/libgcc_s.1.dylib (compatibility version 1.0.0, current version 1.0.0)
-```
-
-These can be manually placed in the file system, but `brew install gcc48` is broken on High Sierra for some reason.
 
