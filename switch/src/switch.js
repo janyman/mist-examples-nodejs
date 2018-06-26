@@ -32,6 +32,14 @@ function Switch() {
             node.changed('relay');
         }
     });
+
+    // This endpoint shows how arbitrary BSON-encoded data can be sent over Mist, and how a reply can be sent back 
+    node.addEndpoint('omiData', {
+        type: 'invoke',
+        invoke: function(args, peer, cb) {
+            cb(null, "Good day Sir, your args were:" + args + " and the switch state is " + relay);
+        }
+    })
 }
 
 module.exports = {
