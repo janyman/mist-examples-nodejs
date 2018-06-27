@@ -89,9 +89,23 @@ function OmiNode() {
                 //console.log("wld:", data);
                 for (var i in data) {
                     if (data[i] && data[i].claim === true) {
-                        mist.wish.request("wld.friendRequest", [localUid, data[i].ruid, data[i].rhid], (err, data) => {
-                            console.log("Friend request sent to:", data[i].alias);
+                        var friendCandidate = data[i];
+                        mist.wish.request("identity.list", [], (err, data) => {
+                            console.log("friend req, identity.list", err, data);
+                            var found = false;
+                            for (var i in data) {
+                                if (data[i].uid.equals(friendCandidate.ruid)) {
+                                    console.log("Not sending friendreq to ", friendCandidate.alias);
+                                    found = true;
+                                }
+                            }
+                            if (!found) {
+                                mist.wish.request("wld.friendRequest", [localUid, friendCandidate.ruid, friendCandidate.rhid], (err, data) => {
+                                    console.log("Friend request sent to:", friendCandidate.alias);
+                                });
+                            }
                         });
+                        
                     }
                 }
             });
