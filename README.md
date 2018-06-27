@@ -1,3 +1,12 @@
+# Example code for illlustrating protocol tunneling over Mist
+
+This example code illustrates how higher-level protocols can be tunneled over Mist. The example consists of two parts
+
+* switch, which simulates an on/off switch, and that also has an endpoint for receiving tunneled protocol data unit
+* omiNode, which simulates a peer capable of sending and receiving protocol data units from the switch
+
+
+
 # Example code for mist-api on node.js
 
 ## Prerequisites
